@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -86,20 +88,26 @@ fun CartScreen(
                 elevation = 0.dp
             )
 
-            // Cart items list
-            LazyColumn(
-                modifier = Modifier.weight(1f), contentPadding = PaddingValues(vertical = 8.dp)
-            ) {
-                itemsIndexed(items = state.value.cartItems) { _, item ->
-                    CartItemRow(
-                        cartItem = item,
-                        onAdd = { onEvent(CartIntent.AddItemToCart(item)) },
-                        onRemove = { onEvent(CartIntent.RemoveItemFromCart(item)) })
+            if (state.value.cartItems.isNotEmpty()) {
+                // Cart items list
+                LazyColumn(
+                    modifier = Modifier.weight(1f), contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    itemsIndexed(items = state.value.cartItems) { _, item ->
+                        CartItemRow(
+                            cartItem = item,
+                            onAdd = { onEvent(CartIntent.AddItemToCart(item)) },
+                            onRemove = { onEvent(CartIntent.RemoveItemFromCart(item)) })
+                    }
+                }
+                CartSummary(state.value.cartItems)
+            } else {
+                Box(
+                    modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+                ) {
+                    Text("Your cart is empty")
                 }
             }
-
-            // Summary
-            CartSummary(state.value.cartItems)
         }
     }
 }
@@ -185,8 +193,7 @@ fun CartSummary(cartItems: List<CartItem>) {
 @Composable
 fun SummaryRow(label: String, amount: Double, isBold: Boolean = false) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(label, style = MaterialTheme.typography.body1)
         Text(
