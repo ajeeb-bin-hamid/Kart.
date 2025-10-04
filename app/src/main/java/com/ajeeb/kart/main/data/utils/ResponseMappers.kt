@@ -1,7 +1,13 @@
 package com.ajeeb.kart.main.data.utils
 
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import com.ajeeb.kart.common.data.model.CartTableItem
 import com.ajeeb.kart.main.data.model.GetProductsResponse
+import com.ajeeb.kart.main.domain.model.CartItem
 import com.ajeeb.kart.main.domain.model.Product
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 fun mapToProducts(rawResponse: ArrayList<GetProductsResponse>): ArrayList<Product> {
     return rawResponse
@@ -23,4 +29,23 @@ fun mapToProducts(rawResponse: ArrayList<GetProductsResponse>): ArrayList<Produc
             }
         }
         .toCollection(ArrayList())
+}
+
+fun mapToCartItemsFlow(rawFlow: Flow<List<CartTableItem>>): Flow<SnapshotStateList<CartItem>> {
+    return rawFlow.map { response ->
+        mutableStateListOf<CartItem>().apply {
+            response.forEach {
+                add(
+                    CartItem(
+                        itemID = it.itemID,
+                        itemName = it.itemName,
+                        sellingPrice = it.sellingPrice,
+                        taxPercentage = it.taxPercentage,
+                        quantity = it.quantity,
+                        lastUpdated = it.lastUpdated
+                    )
+                )
+            }
+        }
+    }
 }

@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/schemas/com.ajeeb.kart.common.data.db.KartDb/1.json

@@ -108,7 +108,9 @@ fun HomeScreen(
                         .padding(padding)
                 ) {
                     itemsIndexed(items = state.value.products) { _, product ->
-                        ItemCard(product)
+                        ItemCard(product) {
+                            onEvent(HomeIntent.AddItemToCart(product))
+                        }
                     }
                 }
             }
@@ -119,7 +121,7 @@ fun HomeScreen(
 
 
 @Composable
-fun ItemCard(item: Product) {
+fun ItemCard(item: Product, onClickAdd: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -157,7 +159,7 @@ fun ItemCard(item: Product) {
             }
 
             Button(
-                onClick = { },
+                onClick = { onClickAdd() },
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     backgroundColor = Color(0xFF007AFF)
