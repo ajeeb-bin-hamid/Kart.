@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.ajeeb.kart.common.core.KartTheme
 import com.ajeeb.kart.common.core.NavGraph
-import com.ajeeb.kart.ui.theme.KartTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
